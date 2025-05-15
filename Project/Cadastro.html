@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            opacity: 0.5;
+            background: rgba(255,255,255,0.3);
+            animation: rise 8s linear infinite;
+        }
+        @keyframes rise {
+            to {
+                transform: translateY(-110vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+        .cadastro-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.15);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            backdrop-filter: blur(6px);
+            width: 320px;
+            text-align: center;
+        }
+        .cadastro-container h2 {
+            color: #fff;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 3px;
+            color: #333;
+            font-size: 16px;
+        }
+        .form-group input {
+            width: 90%;
+            padding: 10px;
+            margin: 2px 0;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+        }
+        .form-group input:focus {
+            border-color: #2193b0;
+            outline: none;
+        }
+        .btn-cadastrar {
+            width: 100%;
+            padding: 12px;
+            background: #2193b0;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background 0.3s;
+        }
+        .btn-cadastrar:hover {
+            background: #176582;        }
+    </style>
+</head>
+<body>
+    <div class="bubbles"></div>
+    <div class="cadastro-container">
+        <h2>Cadastro</h2>
+        <form>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input type="text" placeholder="000.000.000-00" name="cpf" maxlength="14" required oninput="mascaraCPF(this)">
+
+                <script>
+                function mascaraCPF(input) {
+                    let value = input.value.replace(/\D/g, '');
+                    if (value.length > 11) value = value.slice(0, 11);
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                    input.value = value;
+                }
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" maxlength="15" required oninput="mascaraTelefone(this)">
+
+                <script>
+                function mascaraTelefone(input) {
+                    let value = input.value.replace(/\D/g, '');
+                    if (value.length > 11) value = value.slice(0, 11);
+                    if (value.length > 10) {
+                        value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1)$2-$3');
+                    } else if (value.length > 6) {
+                        value = value.replace(/^(\d{2})(\d{4,5})(\d{0,4}).*/, '($1)$2-$3');
+                    } else if (value.length > 2) {
+                        value = value.replace(/^(\d{2})(\d{0,5})/, '($1)$2');
+                    } else {
+                        value = value.replace(/^(\d*)/, '($1');
+                    }
+                    input.value = value;
+                }
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="text" id="endereco" name="endereco" required>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="text" id="email" name="email" maxlength="50" required oninput="mascaraEmail(this)" placeholder="exemplo@email.com">
+
+                <script>
+                function mascaraEmail(input) {
+                    let value = input.value;
+                    // Remove espaços
+                    value = value.replace(/\s/g, '');
+                    // Permite apenas letras, números, @, . , _ , - 
+                    value = value.replace(/[^a-zA-Z0-9@._-]/g, '');
+                    // Garante apenas um @
+                    let parts = value.split('@');
+                    if (parts.length > 2) {
+                        value = parts[0] + '@' + parts.slice(1).join('').replace(/@/g, '');
+                    }
+                    input.value = value;
+                }
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            <div class="form-group">
+                <label for="repetir-senha">Repetir senha</label>
+                <input type="password" id="repetir-senha" name="repetir-senha" required>
+            </div>
+            <button type="submit" class="btn-cadastrar">Cadastrar</button>
+            <script>
+        // Gerar bolhas
+        const bubblesContainer = document.querySelector('.bubbles');
+        function randomBetween(a, b) {
+            return Math.random() * (b - a) + a;
+        }
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = randomBetween(20, 60);
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${randomBetween(0, 100)}vw`;
+            bubble.style.animationDuration = `${randomBetween(6, 12)}s`;
+            bubble.style.opacity = randomBetween(0.2, 0.5);
+            bubblesContainer.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 12000);
+        }
+        setInterval(createBubble, 500);
+        // Criar algumas bolhas iniciais
+        for(let i=0;i<10;i++) createBubble();
+    </script>
+        </form>
+    </div>
+</body>
+</html>

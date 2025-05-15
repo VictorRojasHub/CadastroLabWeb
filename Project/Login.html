@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Azul com Bolhas</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255,255,255,0.15);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+            backdrop-filter: blur(6px);
+            width: 320px;
+            text-align: center;
+        }
+        .login-container h2 {
+            color: #fff;
+            margin-bottom: 24px;
+        }
+        .login-container input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            background: #2193b0;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: background 0.3s;
+        }
+        .login-container button:hover {
+            background: #176582;
+        }
+        /* Bolhas */
+        .bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            border-radius: 50%;
+            opacity: 0.5;
+            background: rgba(255,255,255,0.3);
+            animation: rise 8s linear infinite;
+        }
+        @keyframes rise {
+            to {
+                transform: translateY(-110vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bubbles"></div>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" placeholder="Usuário" required>
+        <input type="password" placeholder="Senha" required>
+        <button>Entrar</button>
+        <button style="background: #fff; color: #444; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: bold;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px; height:20px;">
+            Entrar com o Google
+        </button>
+        <br>
+        <a href="#">Esqueceu a senha?</a>
+        <div style="display: flex; align-items: center; margin: 24px 0 16px 0;">
+            <hr style="flex:1; border: none; border-top: 1px solid #fff; opacity: 0.5;">
+            <span style="margin: 0 12px; color: #fff; opacity: 0.8;">ou</span>
+            <hr style="flex:1; border: none; border-top: 1px solid #fff; opacity: 0.5;">
+        </div>
+        <button>Criar Conta</button>
+    </div>
+    <script>
+        // Gerar bolhas
+        const bubblesContainer = document.querySelector('.bubbles');
+        function randomBetween(a, b) {
+            return Math.random() * (b - a) + a;
+        }
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = randomBetween(20, 60);
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${randomBetween(0, 100)}vw`;
+            bubble.style.animationDuration = `${randomBetween(6, 12)}s`;
+            bubble.style.opacity = randomBetween(0.2, 0.5);
+            bubblesContainer.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 12000);
+        }
+        setInterval(createBubble, 500);
+        // Criar algumas bolhas iniciais
+        for(let i=0;i<10;i++) createBubble();
+    </script>
+</body>
+</html>
